@@ -29,6 +29,9 @@
     <ClInclude Include="CDNConnection.h">
       <Filter>CODE</Filter>
     </ClInclude>
+    <ClInclude Include="common.h">
+      <Filter>CODE</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HLSProxy.cpp">
@@ -38,6 +41,9 @@
       <Filter>HTTP</Filter>
     </ClCompile>
     <ClCompile Include="CDNConnection.cpp">
+      <Filter>CODE</Filter>
+    </ClCompile>
+    <ClCompile Include="common.cpp">
       <Filter>CODE</Filter>
     </ClCompile>
   </ItemGroup>

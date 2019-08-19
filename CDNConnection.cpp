@@ -88,8 +88,8 @@ void CDNConnection::send(char * data, size_t data_size) {
 }
 
 size_t CDNConnection::read_next_chunk(DataBuffer * buffer) {
-	buffer->realloc_capacity(buffer->_bytes_written - buffer->_position + _CHUNK_SIZE_);
-	int count               = ::recv(_socket, buffer->_storage + buffer->_bytes_written, _CHUNK_SIZE_, 0);
+	buffer->adjust_capacity(buffer->bytes_stored() + _CHUNK_SIZE_);
+	int count               = ::recv(_socket, buffer->end_of_data(), _CHUNK_SIZE_, 0);
 	buffer->_bytes_written += count;
 	return count;
 }
@@ -154,10 +154,10 @@ void CDNConnectionSSL::connect(std::string host, uint32_t port) {
 	}
 
 	// TODO: proper setup
-	mbedtls_ssl_conf_authmode(&_conf, MBEDTLS_SSL_VERIFY_OPTIONAL);
+	mbedtls_ssl_conf_authmode(&_conf, MBEDTLS_SSL_VERIFY_OPTIONAL); // MBEDTLS_SSL_VERIFY_REQUIRED
 	mbedtls_ssl_conf_ca_chain(&_conf, &_cacert, NULL);
 	mbedtls_ssl_conf_rng(&_conf, mbedtls_ctr_drbg_random, &_ctr_drbg);
-	void * debug_log_context = NULL;
+	void * debug_log_context = NULL; // context pointer not used in our simple logging logic
 	mbedtls_ssl_conf_dbg(&_conf, log_mbedtls_debug, debug_log_context);
 
 	status = mbedtls_ssl_setup(&_ssl, &_conf);
@@ -230,7 +230,7 @@ size_t CDNConnectionSSL::read_next_chunk(DataBuffer * buffer) {
 	}
 
 	int count               = 0;
-	buffer->realloc_capacity(buffer->_bytes_written - buffer->_position + _CHUNK_SIZE_);
+	buffer->adjust_capacity(buffer->_bytes_written - buffer->_position + _CHUNK_SIZE_);
 	while(true) {
 		count           = mbedtls_ssl_read(
 			&_ssl,

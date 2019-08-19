@@ -172,6 +172,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CDNConnection.h" />
+    <ClInclude Include="common.h" />
     <ClInclude Include="HLSProxy.h" />
     <ClInclude Include="http-parser\http_parser.h" />
     <ClInclude Include="log.h" />
@@ -179,6 +180,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CDNConnection.cpp" />
+    <ClCompile Include="common.cpp" />
     <ClCompile Include="HLSProxy.cpp" />
     <ClCompile Include="http-parser\http_parser.c" />
   </ItemGroup>

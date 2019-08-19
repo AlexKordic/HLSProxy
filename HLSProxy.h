@@ -49,8 +49,15 @@ class DataBuffer
 public:
 	DataBuffer(int initial_size);
 	~DataBuffer();
+	
+	char * start_of_data() { return _storage + _position; }
+	char * end_of_data()   { return _storage + _bytes_written; }
+	int    bytes_stored()  { return _bytes_written - _position; }
+	void   consume_bytes(int amount) { _position += amount; }
+	void   eliminate_parsed_data() { if(_position == _bytes_written) clear(); }
+
 	void read_next_chunk(SOCKET socket);
-	void realloc_capacity(int amount_needed);
+	void adjust_capacity(int amount_needed);
 	void clear();
 
 	char * _storage;
@@ -66,7 +73,8 @@ private:
 class URLTransformation
 {
 public:
-	URLTransformation(std::string input_url);
+	URLTransformation();
+	void calculate(std::string input_url);
 
 	std::string result_url;
 	bool        use_ssl;
@@ -98,7 +106,7 @@ public:
 	std::string              _url;
 	std::string              _method;
 	std::string              _http_version;
-	int                      _response_code;
+	int                      _response_status_code;
 
 public:
 	HTTPParser(bool request);
@@ -138,11 +146,14 @@ private:
 	pthread_t   _thread_handle;
 
 private:
-	HLSProxyServer * _server;
-	SOCKET           _socket; // player connection
-	std::string      _address;
-	std::string      _modified_request;
-	CDNConnection *  _cdn_connection;
+	HLSProxyServer   * _server;
+	SOCKET             _socket; // player connection
+	std::string        _address;
+	std::string        _modified_request;
+	CDNConnection    * _cdn_connection;
+	URLTransformation  _modified_url;
+	double             _start_timestamp;
+	static void * run_player_request_parsing_proxy(void * client);
 	static void * run_cdn_response_parsing_proxy(void * client);
 	void          send_to_player_nossl(char * data, int data_size);
 };
@@ -169,6 +180,7 @@ protected:
 	int         _recvbuf_size;
 	int         _sendbuf_size;
 
+	bool        _wsa_cleanup_needed;
 	std::deque<HLSClient*> _client_list;
 };
 
