@@ -57,8 +57,10 @@ public:
 	void   eliminate_parsed_data() { if(_position == _bytes_written) clear(); }
 
 	void read_next_chunk(SOCKET socket);
-	void adjust_capacity(int amount_needed);
+	void reserve_capacity_from_start(int amount_needed);
+	void reserve_capacity_from_end(int amount_needed);
 	void clear();
+	void write_to_end(const char * data, int amount);
 
 	char * _storage;
 	int    _bytes_allocated;
@@ -80,6 +82,7 @@ public:
 	bool        use_ssl;
 	uint32_t    cdn_port;
 	std::string cdn_domain;
+	std::string cdn_port_string;
 };
 
 class HTTPHeader
@@ -144,6 +147,12 @@ public:
 private:
 	friend class HLSProxyServer;
 	pthread_t   _thread_handle;
+	enum RESPONSE_MEDIA_CONTEXT_TYPE
+	{
+		MEDIA_CONTEXT_UNKNOWN = 0,
+		MEDIA_CONTEXT_SEGMENT,
+		MEDIA_CONTEXT_MANIFEST
+	};
 
 private:
 	HLSProxyServer   * _server;
@@ -155,7 +164,14 @@ private:
 	double             _start_timestamp;
 	static void * run_player_request_parsing_proxy(void * client);
 	static void * run_cdn_response_parsing_proxy(void * client);
-	void          send_to_player_nossl(char * data, int data_size);
+	void          parse_received_data(DataBuffer & input, int & last_newline_position, DataBuffer & output);
+	void          transform_playlist_line(const char * line_start, int size, DataBuffer & output);
+	void          send_to_player_nossl(const char * data, int data_size);
+	void          media_context_type_from_request_url();
+	void          media_context_type_from_response_header(HTTPParser * response_parser);
+
+	RESPONSE_MEDIA_CONTEXT_TYPE _media_context_type;
+	const char *  media_context_type_to_str();
 };
 
 class HLSProxyServer

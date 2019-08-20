@@ -88,7 +88,7 @@ void CDNConnection::send(char * data, size_t data_size) {
 }
 
 size_t CDNConnection::read_next_chunk(DataBuffer * buffer) {
-	buffer->adjust_capacity(buffer->bytes_stored() + _CHUNK_SIZE_);
+	buffer->reserve_capacity_from_end(_CHUNK_SIZE_);
 	int count               = ::recv(_socket, buffer->end_of_data(), _CHUNK_SIZE_, 0);
 	buffer->_bytes_written += count;
 	return count;
@@ -230,11 +230,11 @@ size_t CDNConnectionSSL::read_next_chunk(DataBuffer * buffer) {
 	}
 
 	int count               = 0;
-	buffer->adjust_capacity(buffer->_bytes_written - buffer->_position + _CHUNK_SIZE_);
+	buffer->reserve_capacity_from_end(_CHUNK_SIZE_);
 	while(true) {
 		count           = mbedtls_ssl_read(
 			&_ssl,
-			(unsigned char *) (buffer->_storage + buffer->_bytes_written),
+			(unsigned char *) (buffer->end_of_data()),
 			_CHUNK_SIZE_
 		);
 		if(count == MBEDTLS_ERR_SSL_WANT_READ || count == MBEDTLS_ERR_SSL_WANT_WRITE) continue;
