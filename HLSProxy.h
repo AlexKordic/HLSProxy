@@ -139,6 +139,7 @@ class HLSClient
 {
 public:
 	HLSClient(HLSProxyServer * server, SOCKET client_socket, sockaddr_in client_address, int address_size);
+	~HLSClient();
 	void run_player_request_parsing();
 	void run_cdn_response_parsing();
 	// when run() opearation ends cleanup() is called

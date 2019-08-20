@@ -19,6 +19,7 @@ CDNConnection::CDNConnection() :
 
 CDNConnection::~CDNConnection() {
 	this->close();
+	closesocket(_socket);
 }
 
 void CDNConnection::connect(std::string host, uint32_t port) {
@@ -95,7 +96,7 @@ size_t CDNConnection::read_next_chunk(DataBuffer * buffer) {
 }
 
 void CDNConnection::close() {
-	closesocket(_socket);
+	shutdown(_socket, SD_BOTH);
 }
 
 
