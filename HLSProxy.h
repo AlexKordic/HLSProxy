@@ -43,6 +43,11 @@ public:
 	EventConnectionBroken() : BaseError("^ConnectionBroken^") {}
 };
 
+class EventParsingBroken : public BaseError
+{
+public:
+	EventParsingBroken() : BaseError("^EventParsingBroken^") {}
+};
 
 
 class DataBuffer
@@ -73,10 +78,10 @@ private:
 	int _CHUNK_SIZE_;
 };
 
-class URLTransformation
+class RequestlineTransformation
 {
 public:
-	URLTransformation();
+	RequestlineTransformation();
 	void calculate(std::string input_url);
 
 	std::string result_url;
@@ -84,6 +89,13 @@ public:
 	uint32_t    cdn_port;
 	std::string cdn_domain;
 	std::string cdn_port_string;
+};
+
+class AbsoluteURLTransformation
+{
+public:
+	std::string resulting_url;
+	AbsoluteURLTransformation(std::string http_url, std::string listen_host, std::string listen_port_string);
 };
 
 class HTTPHeader
@@ -202,9 +214,9 @@ private:
 	HLSProxyServer   * _server;
 	SOCKET             _socket; // player connection
 	std::string        _address;
-	std::string        _modified_request;
 	CDNConnection    * _cdn_connection;
-	URLTransformation  _modified_url;
+	RequestlineTransformation  _cdn_url;
+	std::string        _cdn_request;
 	double             _start_timestamp;
 	void          run_player_request_parsing();
 	void          run_cdn_response_parsing();
@@ -240,15 +252,17 @@ public:
 
 	// Block handling connections
 	void run_forever();
+
 	PlayerActionTracker _player_action_tracker;
+	std::string         _listen_host;
+	std::string         _listen_port_string;
+	uint32_t            _listen_port;
 
 protected:
 // 	void client_connected(HLSClient & client); // moved to HLSClient::run
 
 // 	std::string _default_host;
 // 	uint32_t    _default_port;
-	std::string _listen_host;
-	uint32_t    _listen_port;
 	SOCKET      _listen_socket;
 	int         _listen_backlog_size;
 	int         _recvbuf_size;
