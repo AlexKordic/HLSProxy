@@ -13,6 +13,14 @@ bool string_same_ignore_case(const char * one, const char * other) {
 	return false;
 }
 
+bool   string_same_with_size(const char * one, const char * other, size_t length) {
+	if(0 == strncmp(one, other, length))
+	{
+		return true;
+	}
+	return false;
+}
+
 bool   string_same_ignore_case_with_size(const char * one, const char * other, size_t length) {
 #ifdef WIN32
 	if(0 == _strnicmp(one, other, length))

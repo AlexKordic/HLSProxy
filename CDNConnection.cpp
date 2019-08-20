@@ -240,7 +240,7 @@ size_t CDNConnectionSSL::read_next_chunk(DataBuffer * buffer) {
 		);
 		if(count == MBEDTLS_ERR_SSL_WANT_READ || count == MBEDTLS_ERR_SSL_WANT_WRITE) continue;
 		if(count == MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY || count == 0) {
-			LOG << "CDN ssl closed connection";
+			// // LOG << "CDN ssl closed connection";
 			_ssl_context_valid = false;
 			throw EventConnectionBroken();
 		}

@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <string>
 #include <deque>
+#include <map>
 
 
 #if defined(WIN32)
@@ -131,6 +132,50 @@ private:
 	std::string                    _last_reported_field;
 };
 
+
+class PlayerActionContext
+{
+public:
+	PlayerActionContext() {}
+	~PlayerActionContext() {}
+	
+	std::string active_playlist;
+
+	// // void found_variant_stream(std::string uri, std::string spec);
+	// // void requested_media_playlist(std::string uri);
+};
+
+class PlayerActionTracker
+{
+public:
+	PlayerActionTracker();
+	~PlayerActionTracker();
+	uint32_t              new_player();
+	void                  new_player_with_number(uint32_t identity_number);
+	PlayerActionContext * player_from_id(uint32_t id);
+protected:
+	std::map<uint32_t, PlayerActionContext *> _id_player;
+	uint32_t                                  _next_player_id;
+};
+
+// class M3U8ParsingContext
+// {
+// public:
+// 	M3U8ParsingContext() : variant_stream_parsed(false) {}
+// 	~M3U8ParsingContext() {}
+// 
+// 	void store_variant_tag(std::string tag) {
+// 		variant_stream_parsed = true;
+// 		last_variant_tag      = tag;
+// 	}
+// 	void clear_variant_tag()       { last_variant_tag.clear(); }
+// 	bool waiting_for_variant_uri() { return last_variant_tag.empty() == false; }
+// 
+// 	bool        variant_stream_parsed;
+// 	std::string last_variant_tag;
+// };
+
+
 class  HLSProxyServer;
 struct http_parser;
 class  CDNConnection;
@@ -140,8 +185,6 @@ class HLSClient
 public:
 	HLSClient(HLSProxyServer * server, SOCKET client_socket, sockaddr_in client_address, int address_size);
 	~HLSClient();
-	void run_player_request_parsing();
-	void run_cdn_response_parsing();
 	// when run() opearation ends cleanup() is called
 	void cleanup();
 
@@ -163,6 +206,8 @@ private:
 	CDNConnection    * _cdn_connection;
 	URLTransformation  _modified_url;
 	double             _start_timestamp;
+	void          run_player_request_parsing();
+	void          run_cdn_response_parsing();
 	static void * run_player_request_parsing_proxy(void * client);
 	static void * run_cdn_response_parsing_proxy(void * client);
 	void          parse_received_data(DataBuffer & input, int & last_newline_position, DataBuffer & output);
@@ -175,6 +220,15 @@ private:
 
 	RESPONSE_MEDIA_CONTEXT_TYPE _media_context_type;
 	const char *  media_context_type_to_str();
+
+	void          read_cookie(HTTPParser * request_parser);
+	std::string   _identity_string;
+	uint32_t      _identity_number;
+	bool          _cookie_exists;
+
+	// M3U8ParsingContext  _m3u8_parsing_context;
+	bool          _parsing_master_playlist;
+	std::string   _past_media_playlist_url;
 };
 
 class HLSProxyServer
@@ -186,6 +240,7 @@ public:
 
 	// Block handling connections
 	void run_forever();
+	PlayerActionTracker _player_action_tracker;
 
 protected:
 // 	void client_connected(HLSClient & client); // moved to HLSClient::run

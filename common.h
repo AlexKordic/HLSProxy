@@ -8,6 +8,7 @@
 double now();
 
 bool   string_endswith(std::string & txt, std::string ending);
+bool   string_same_with_size(const char * one, const char * other, size_t length);
 bool   string_same_ignore_case(const char * one, const char * other);
 bool   string_same_ignore_case_with_size(const char * one, const char * other, size_t length);
 

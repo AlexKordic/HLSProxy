@@ -2,6 +2,8 @@
 #ifndef _LOG_H_H_
 #define _LOG_H_H_
 
+#define FILELOG_MAX_LEVEL logDEBUG
+
 #include <sstream>
 #include <string>
 #include <stdio.h>
@@ -186,5 +188,6 @@ inline std::string NowTime()
 #define LOGE FILE_LOG(logERROR)
 #define LOGI FILE_LOG(logINFO)
 #define LOG FILE_LOG(logDEBUG)
+#define LOGV FILE_LOG(logDEBUG1)
 
 #endif // _LOG_H_H_
