@@ -167,6 +167,8 @@ private:
 	void          parse_received_data(DataBuffer & input, int & last_newline_position, DataBuffer & output);
 	void          transform_playlist_line(const char * line_start, int size, DataBuffer & output);
 	void          send_to_player_nossl(const char * data, int data_size);
+	void          send_to_player_nossl_chunked(const char * data, int data_size);
+	void          send_to_player_terminating_chunk_nossl();
 	void          media_context_type_from_request_url();
 	void          media_context_type_from_response_header(HTTPParser * response_parser);
 
