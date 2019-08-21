@@ -2,6 +2,7 @@
 #include "CDNConnection.h"
 #include "log.h"
 #include <ws2tcpip.h>
+#include "mbedtls/error.h"
 
 
 #if defined(WIN32)
@@ -245,7 +246,9 @@ size_t CDNConnectionSSL::read_next_chunk(DataBuffer * buffer) {
 			throw EventConnectionBroken();
 		}
 		if(count < 0) {
-			LOG << "CDN ssl error=" << count;
+			char error_str[200];
+			mbedtls_strerror(count, error_str, 199);
+			LOG << "CDN ssl ret=" << count << " msg=" << error_str;
 			_ssl_context_valid = false;
 			throw ErrorCritical("CDN ssl error=");
 		}
