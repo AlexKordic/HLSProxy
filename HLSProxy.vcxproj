@@ -171,18 +171,25 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="app_exceptions.h" />
     <ClInclude Include="CDNConnection.h" />
     <ClInclude Include="common.h" />
+    <ClInclude Include="DataBuffer.h" />
     <ClInclude Include="HLSProxy.h" />
     <ClInclude Include="http-parser\http_parser.h" />
+    <ClInclude Include="HTTPParser.h" />
     <ClInclude Include="log.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="url_transformation.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CDNConnection.cpp" />
     <ClCompile Include="common.cpp" />
+    <ClCompile Include="DataBuffer.cpp" />
     <ClCompile Include="HLSProxy.cpp" />
     <ClCompile Include="http-parser\http_parser.c" />
+    <ClCompile Include="HTTPParser.cpp" />
+    <ClCompile Include="url_transformation.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -32,6 +32,18 @@
     <ClInclude Include="common.h">
       <Filter>CODE</Filter>
     </ClInclude>
+    <ClInclude Include="app_exceptions.h">
+      <Filter>CODE</Filter>
+    </ClInclude>
+    <ClInclude Include="DataBuffer.h">
+      <Filter>CODE</Filter>
+    </ClInclude>
+    <ClInclude Include="url_transformation.h">
+      <Filter>CODE</Filter>
+    </ClInclude>
+    <ClInclude Include="HTTPParser.h">
+      <Filter>CODE</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HLSProxy.cpp">
@@ -44,6 +56,15 @@
       <Filter>CODE</Filter>
     </ClCompile>
     <ClCompile Include="common.cpp">
+      <Filter>CODE</Filter>
+    </ClCompile>
+    <ClCompile Include="DataBuffer.cpp">
+      <Filter>CODE</Filter>
+    </ClCompile>
+    <ClCompile Include="url_transformation.cpp">
+      <Filter>CODE</Filter>
+    </ClCompile>
+    <ClCompile Include="HTTPParser.cpp">
       <Filter>CODE</Filter>
     </ClCompile>
   </ItemGroup>

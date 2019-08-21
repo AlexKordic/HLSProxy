@@ -1,6 +1,7 @@
 
 #include "CDNConnection.h"
 #include "log.h"
+#include "app_exceptions.h"
 #include <ws2tcpip.h>
 #include "mbedtls/error.h"
 
