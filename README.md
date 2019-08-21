@@ -4,7 +4,7 @@ HLSProxy is fast, low-footprint, HTTP proxy server implemented in C++. Integrati
 
 Its needed in peer-to-peer streaming system as player's first point of contact where Apple's HTTP live streaming protocol is used. 
 
-The proxy function is first step. In the future it may be upgraded to take media segments from perro-to-peer networking layer. For more info about the concept see https://en.wikipedia.org/wiki/Popcorn_Time.
+The proxy function is first step. In the future it may be upgraded to take media segments from perr-to-peer networking layer. For more info about the concept see https://en.wikipedia.org/wiki/Popcorn_Time.
 
 ![P2P streaming purpose](http://dzeri.com/streamlabs/proxy_usage.png)
 
